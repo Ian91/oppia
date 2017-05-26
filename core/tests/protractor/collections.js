@@ -20,6 +20,7 @@ var general = require('../protractor_utils/general.js');
 var users = require('../protractor_utils/users.js');
 var admin = require('../protractor_utils/admin.js');
 var collectionEditor = require('../protractor_utils/collectionEditor.js');
+var collectionPlayer = require('../protractor_utils/collectionPlayer.js');
 
 describe('Collections', function() {
   beforeAll(function() {
@@ -38,6 +39,8 @@ describe('Collections', function() {
     );
     users.logout();
   });
+ 
+ 
 
   it('visits the collection editor', function() {
     users.login('alice@collections.com');
@@ -76,6 +79,21 @@ describe('Collections', function() {
     browser.get('/collection/0');
     browser.waitForAngular();
     users.logout();
+  });
+
+  it('interacts with the collection player as a guest', function() {
+    // Go to the collection player, as a guest.
+    collectionPlayer.goToDemoCollection();
+    // Check that we are in the guest state (sign in button visible).
+    collectionPlayer.checkSignInButtonAsGuest();
+    // Play the third demo exploration in the collection.
+    collectionPlayer.playMiddleExplorationAsGuest();
+    // Verify that the suggested exploration is the next in the collection.
+    collectionPlayer.verifySuggestedExplorationAsGuest();
+    // Go back to collection player.
+    collectionPlayer.goToDemoCollection();
+    // Verify that there are 5 uncompleted explorations, since this is a guest.
+    collectionPlayer.verifyCollectionStateUnchanged();
   });
 
   afterEach(function() {
